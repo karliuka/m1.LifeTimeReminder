@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Faonni
+ *  
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade module to newer
+ * versions in the future.
+ * 
+ * @package     Faonni_LifeTimeReminder
+ * @copyright   Copyright (c) 2015 Karliuka Vitalii(karliuka.vitalii@gmail.com) 
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+-->
+<config>
+	<modules>
+		<Faonni_LifeTimeReminder>
+			<version>0.1.1</version>
+		</Faonni_LifeTimeReminder>
+	</modules>
+	<global>
+        <models>
+            <faonni_lifetimereminder>
+                <class>Faonni_LifeTimeReminder_Model</class>
+                <resourceModel>faonni_lifetimereminder_resource</resourceModel>
+            </faonni_lifetimereminder>
+            <faonni_lifetimereminder_resource>
+                <class>Faonni_LifeTimeReminder_Model_Resource</class>
+                <entities>
+                    <schedule>
+                        <table>faonni_lifetimereminder_schedule</table>
+                    </schedule>
+                </entities>
+            </faonni_lifetimereminder_resource>
+        </models>	
+		<helpers>
+			<faonni_lifetimereminder>
+				<class>Faonni_LifeTimeReminder_Helper</class>
+			</faonni_lifetimereminder>
+		</helpers>
+        <blocks>
+            <faonni_lifetimereminder>
+                <class>Faonni_LifeTimeReminder_Block</class>
+            </faonni_lifetimereminder>
+        </blocks>
+        <resources>
+            <faonni_lifetimereminder_setup>
+                <setup>
+                    <module>Faonni_LifeTimeReminder</module>
+                    <class>Faonni_LifeTimeReminder_Model_Resource_Setup</class>
+                </setup>
+            </faonni_lifetimereminder_setup>
+        </resources>
+        <template>
+            <email>
+                <faonni_lifetimereminder_email_template translate="label" module="faonni_lifetimereminder">
+                    <label>Life Time Reminder</label>
+                    <file>faonni/lifetimereminder.html</file>
+                    <type>html</type>
+                </faonni_lifetimereminder_email_template>
+            </email>
+        </template>
+        <events>
+            <order_cancel_after>
+                <observers>
+                    <faonni_lifetimereminder>
+                        <class>faonni_lifetimereminder/observer</class>
+                        <method>orderCancel</method>
+                    </faonni_lifetimereminder>
+                </observers>
+            </order_cancel_after>
+            <sales_order_save_after>
+                <observers>
+                    <faonni_lifetimereminder>
+                        <class>faonni_lifetimereminder/observer</class>
+                        <method>orderSave</method>
+                    </faonni_lifetimereminder>
+                </observers>
+            </sales_order_save_after>
+        </events>		
+	</global>
+    <default>
+        <promo>
+            <faonni_lifetimereminder>
+                <enabled>1</enabled>
+                <frequency>I</frequency>
+                <interval>15</interval>
+                <minutes>0</minutes>
+                <limit>100</limit>
+                <threshold>1</threshold>
+                <identity>general</identity>
+            </faonni_lifetimereminder>
+        </promo>
+    </default>
+    <crontab>
+        <jobs>
+            <send_filterlife_notification>
+                <schedule>
+                    <cron_expr>*/15 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>faonni_lifetimereminder/observer::scheduledNotification</model>
+                </run>
+            </send_filterlife_notification>
+        </jobs>
+    </crontab>	
+</config> 
